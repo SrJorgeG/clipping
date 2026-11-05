@@ -1,0 +1,33 @@
+# local / secrets
+config.yaml
+venv.path
+*.env
+.env.*
+
+# media & runtime outputs
+raw/*
+!raw/.gitkeep
+clips/*
+!clips/.gitkeep
+candidates/*
+!candidates/.gitkeep
+out/*
+!out/.gitkeep
+ready_to_upload/*
+!ready_to_upload/.gitkeep
+archive/*
+!archive/.gitkeep
+queue/queue.json
+
+# python
+__pycache__/
+*.py[cod]
+.Python
+*.egg-info/
+.venv/
+venv/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

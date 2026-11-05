@@ -1,0 +1,75 @@
+{
+  "name": "Clipping pipeline stubs (A-D)",
+  "meta": {
+    "note": "Esqueleto para importar/adaptar en N8N. Workflow D NO sube. Rutas relativas al proyecto clipping.",
+    "project": "clipping",
+    "rule": "No YouTube upload without explicit Jorge request"
+  },
+  "workflows": [
+    {
+      "id": "A",
+      "name": "A — Ingestión",
+      "nodes": [
+        {
+          "name": "Schedule o Webhook",
+          "type": "n8n-nodes-base.scheduleTrigger",
+          "notes": "Cron mientras hay live, o Webhook cuando OBS cierra un segmento"
+        },
+        {
+          "name": "Execute capture",
+          "type": "n8n-nodes-base.executeCommand",
+          "parameters": {
+            "command": "/home/box/clipping-venv/bin/python /data/clipping/capture/capture.py --file /data/clipping/samples/demo_peaks.mp4 --name from_n8n"
+          }
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "B — Detección",
+      "nodes": [
+        {
+          "name": "Poll raw/",
+          "type": "n8n-nodes-base.scheduleTrigger",
+          "notes": "O Watch folder vía Execute Command"
+        },
+        {
+          "name": "Execute detect",
+          "type": "n8n-nodes-base.executeCommand",
+          "parameters": {
+            "command": "/home/box/clipping-venv/bin/python /data/clipping/detect/detect_volume.py --in /data/clipping/raw/LAST.mp4 --out /data/clipping/candidates/LAST.json"
+          }
+        },
+        {
+          "name": "IF score",
+          "type": "n8n-nodes-base.if",
+          "notes": "Seguir si candidates[] no vacío"
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "name": "C — Edición",
+      "nodes": [
+        {
+          "name": "Execute edit",
+          "type": "n8n-nodes-base.executeCommand",
+          "parameters": {
+            "command": "/home/box/clipping-venv/bin/python /data/clipping/edit/edit_clips.py --in /data/clipping/raw/LAST.mp4 --candidates /data/clipping/candidates/LAST.json --limit 5"
+          }
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "name": "D — Publicación (BLOQUEADO)",
+      "nodes": [
+        {
+          "name": "STOP — sin subida",
+          "type": "n8n-nodes-base.stickyNote",
+          "notes": "No configurar YouTube OAuth ni videos.insert hasta petición explícita de Jorge. La cola local está en queue/queue.json."
+        }
+      ]
+    }
+  ]
+}

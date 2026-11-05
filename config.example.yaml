@@ -1,0 +1,64 @@
+# Copia a config.yaml y ajusta. No subas config.yaml con secretos.
+project_root: .
+paths:
+  raw: raw
+  clips: clips
+  out: out
+  samples: samples
+  candidates: candidates
+  ready_to_upload: ready_to_upload
+  archive: archive
+  queue: queue/queue.json
+
+capture:
+  # streamlink | file | ytdlp
+  backend: streamlink
+  quality: best
+  # segundos a grabar en modo live de prueba (0 = hasta Ctrl+C / fin de stream)
+  duration_seconds: 60
+  # Ejemplos (NO se usan por defecto; pásalos por CLI):
+  # url: "https://www.twitch.tv/CHANNEL"
+  # url: "https://www.youtube.com/watch?v=..."
+
+detect:
+  # ventana de análisis de RMS (segundos)
+  window_seconds: 0.25
+  # umbral: media + k * desviación (o percentil)
+  method: std  # std | percentile
+  k_std: 1.8
+  percentile: 92
+  # duración mínima/máxima del clip candidato
+  min_clip_seconds: 8
+  max_clip_seconds: 35
+  # margen antes/después del pico
+  pad_before: 1.0
+  pad_after: 2.5
+  # fusionar picos cercanos
+  merge_gap_seconds: 2.0
+  # fase 2 (stubs)
+  faces: false
+  motion: false
+  whisper: false
+
+edit:
+  # 16:9 keep | 9:16 vertical crop center
+  aspect: "9:16"
+  width: 1080
+  height: 1920
+  # zoom ligero en el pico (1.0 = sin zoom)
+  zoom: 1.08
+  # subtítulos: placeholder SRT (Whisper = fase 2)
+  burn_subs: false
+  write_srt: true
+  # estilo CapCut-ish: fade corto
+  fade_in: 0.15
+  fade_out: 0.2
+
+queue:
+  # NUNCA sube. Solo registra clips listos.
+  auto_enqueue: true
+
+n8n:
+  # docker | npx | none
+  preferred: docker
+  note: "Docker no está en el box; ver n8n/README.md"
