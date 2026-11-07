@@ -110,3 +110,8 @@ Ver `n8n/README.md`. Cuatro workflows: A ingestión, B detección, C edición, D
 ## Repositorio
 
 Código y docs: https://github.com/SrJorgeG/clipping
+
+
+## Investigación en curso
+
+- [OpenShorts como sustituto parcial del pipeline (2026-11-07)](docs/openshorts-research-2026-11-07.md): investigación, sin migración hecha. [Decisión propuesta](docs/decisions/2026-11-07-openshorts.md).
